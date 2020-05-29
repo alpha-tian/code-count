@@ -6,6 +6,9 @@ read  -p  '数据库版本(mysql/oracle)：' sqlstate
 if [ -z "$path" ] || [ -z "$sqlstate" ];then
   echo "你倒是输入参数啊！"
   exit 1
+elif [ "$sqlstate" != "mysql" ] && [ "$sqlstate" != "oracle" ];then
+  echo "数据库版本请输入mysql或oracle"
+  exit 2
 fi
 
 if [[ -f $path/count.txt ]];then
@@ -26,10 +29,12 @@ for i in {"*.gradle","*.xml","*.sql","*.java","*.properties","*.js","*.html","Ab
 
         a=`cat $path/"$i"-1.txt | awk '{sum+=$1} END {print sum}'`
         b=`cat $path/"$i"-2.txt | awk '{sum+=$1} END {print sum}'`
-        c=`cat $path/"$i"-3.txt | awk '{sum+=$1} END {print sum}'`
+        c1=`cat $path/"$i"-3.txt | awk '{sum+=$1} END {print sum}'`
+	num=`find "$path" -name "$i" |wc -l`
+        c=$[ $c1 + $num ]
 
-        if [[ "${i}" =~ java$ ]];then
-          c=$[ $c + 1 ]
+        if [[ "${i}" =~ gradle$ ]];then
+          c=$[ $c - 1 ]
         fi
 
         d=$[$c - $b - $a]
@@ -38,6 +43,7 @@ for i in {"*.gradle","*.xml","*.sql","*.java","*.properties","*.js","*.html","Ab
 
 cat << EOF >> count.txt
 "$i"
+文件数：     $num
 总代码行数:  $c
 空行数:      $a
 注释行数:    $b
