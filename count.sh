@@ -1,5 +1,6 @@
 #!/bin/bash
 ###################
+read  -p  '请输入项目名称：'   name
 read  -p  '请输入要统计的代码路径：'   path
 read  -p  '数据库版本(mysql/oracle)：' sqlstate
 
@@ -11,8 +12,8 @@ elif [ "$sqlstate" != "mysql" ] && [ "$sqlstate" != "oracle" ];then
   exit 2
 fi
 
-if [[ -f $path/count.txt ]];then
-  rm -f $path/count.txt
+if [[ -f $path/$name-count.txt ]];then
+  rm -f $path/$name-count.txt
 fi
 
 for i in {"*.gradle","*.xml","*.sql","*.java","*.properties","*.js","*.html","Abstract*.java","*VO.java","*BaseSQL.xml","*BaseSQL_"$sqlstate".xml",}
@@ -56,7 +57,7 @@ for i in {"*.gradle","*.xml","*.sql","*.java","*.properties","*.js","*.html","Ab
         e=`cat $path/"$i"-4.txt`
       done
 
-cat << EOF >> count.txt
+cat << EOF >> $name-count.txt
 "$i"
 文件数：     $num
 文件大小:    $e
@@ -71,5 +72,5 @@ EOF
 
   done
 
-cat $path/count.txt
+cat $PWD/$name-count.txt
 ###################
