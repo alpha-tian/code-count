@@ -10,6 +10,7 @@ if [[ ! $3 ]];then
   exit 168
 else
   echo "开始执行..."
+  echo "$1"
 
   if [ -z "$2" ] || [ -z "$3" ];then
     echo "你倒是输入参数啊！"
@@ -26,6 +27,8 @@ else
   if [[ -f $PWD/$1-$date-count2.txt ]];then
     rm -f $PWD/$1-$date-count2.txt
   fi
+
+  num2=1
  
   for i in {"*.xml","*.sql","*.java","*.properties","*.js","*.gradle","*.html","Abstract*.java","*VO.java","*BaseSQL.xml","*BaseSQL_"$3".xml"}
     do
@@ -90,7 +93,11 @@ EOF
     e=0
 
       rm -f $2/"$i"-1.txt $2/"$i"-2.txt $2/"$i"-3.txt $2/"$i"-4.txt
-  
+
+      a=`awk 'BEGIN{printf "%.f",'$num2/11*100'}'`
+      echo $a%
+      let num2+=1
+
     done
 
   sed -i '5d' $2/$1-$date-code.txt
