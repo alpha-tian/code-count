@@ -1,5 +1,25 @@
 #!/bin/bash
 date=`date +%Y%m%d`
+if [[ ! $2 ]];then
+  echo "错误，已退出"
+  exit 168
+else
+  echo "开始执行..."
+  echo "$1"
+
+  if [ -z "$1" ] || [ -z "$2" ];then
+    echo "你倒是输入参数啊！"
+    exit 1
+  fi
+
+  if [[ -f $PWD/$1-count.txt ]];then
+    rm -f $PWD/$1-count.txt
+  fi
+
+  if [[ -f $PWD/$1-$date-count2.txt ]];then
+    rm -f $PWD/$1-$date-count2.txt
+  fi
+
 sql_type_num=`find $2 -name "*oracle*" | wc -l`
 if [[ sql_type_num -gt 0 ]];then
   sqltype="oracle"
@@ -114,3 +134,5 @@ d=0
   cat $PWD/$1-$date-count2.txt
 
   rm -f $2/$1-$date-code.txt
+
+fi
